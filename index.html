@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVK API Test Integratie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h1 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-building mr-2"></i>KVK API Test Integratie
+                </h1>
+                
+                <div class="mb-8">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Zoek Bedrijf op KVK-nummer</h2>
+                    <div class="flex gap-4">
+                        <input type="text" 
+                               id="kvkNumber" 
+                               placeholder="Voer KVK-nummer in" 
+                               class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button onclick="searchCompany()" 
+                                class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                            Zoeken
+                        </button>
+                    </div>
+                </div>
+
+                <div id="result" class="hidden">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Bedrijfsgegevens</h3>
+                    <div id="companyInfo" class="bg-gray-50 rounded-md p-4">
+                        <!-- Results will be displayed here -->
+                    </div>
+                </div>
+
+                <div id="error" class="hidden text-red-600 mt-4">
+                    <!-- Error messages will be displayed here -->
+                </div>
+
+                <div class="mt-8 text-sm text-gray-600">
+                    <h3 class="font-semibold mb-2">Test Omgeving Informatie:</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Dit is een test integratie met de KVK API</li>
+                        <li>Gebruik test KVK-nummers voor het zoeken</li>
+                        <li>Documentatie: <a href="https://developers.kvk.nl/nl/documentation/testing" class="text-blue-600 hover:underline" target="_blank">KVK Developers Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function searchCompany() {
+            const kvkNumber = document.getElementById('kvkNumber').value.trim();
+            const resultDiv = document.getElementById('result');
+            const companyInfo = document.getElementById('companyInfo');
+            const errorDiv = document.getElementById('error');
+
+            if (!kvkNumber) {
+                showError('Voer een geldig KVK-nummer in');
+                return;
+            }
+
+            try {
+                // Note: This is a mock API call since we need API credentials
+                // In production, this would be replaced with actual API endpoint
+                const mockResponse = {
+                    kvkNummer: kvkNumber,
+                    naam: "Test Bedrijf BV",
+                    straat: "Teststraat",
+                    huisnummer: "123",
+                    postcode: "1234 AB",
+                    plaats: "Amsterdam"
+                };
+
+                // Display the results
+                resultDiv.classList.remove('hidden');
+                errorDiv.classList.add('hidden');
+                
+                companyInfo.innerHTML = `
+                    <div class="space-y-2">
+                        <p><span class="font-semibold">KVK Nummer:</span> ${mockResponse.kvkNummer}</p>
+                        <p><span class="font-semibold">Naam:</span> ${mockResponse.naam}</p>
+                        <p><span class="font-semibold">Adres:</span> ${mockResponse.straat} ${mockResponse.huisnummer}</p>
+                        <p><span class="font-semibold">Postcode:</span> ${mockResponse.postcode}</p>
+                        <p><span class="font-semibold">Plaats:</span> ${mockResponse.plaats}</p>
+                    </div>
+                `;
+            } catch (error) {
+                showError('Er is een fout opgetreden bij het ophalen van de bedrijfsgegevens');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            const resultDiv = document.getElementById('result');
+            
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+            resultDiv.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
